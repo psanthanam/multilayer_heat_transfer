@@ -124,4 +124,5 @@ S_Target=eye(2,2);
     %% solving for the E and H fields.
     e=targetFields(1);  
     h=targetFields(2);
+    %e,h
 end
