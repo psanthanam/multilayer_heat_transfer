@@ -3,8 +3,14 @@ function [ e,h ] = pointJoy(omega,thickness_list, epsilon_list,kx,sourceLayer,d,
 %   omega:          frequency
 %   thickness_list: thickness of every layer, should start and end with Inf
 %   epsilon_list:   epsilon for every layer, complex vector
-%   sourcePosition: where the source is. Origin point is put at the upper
+%   kx:             the parellel wave vector
+%   sourceLayer:    where the source is. Origin point is put at the upper
 %                   surface of layer 1
+%   targetLayer:    the layer where the probe is
+%   e,h:            calculated electric and magnetic fields at the target
+%                   layer, if the target layer has infinite thickness, the 
+%                   fields are defined at the surface, otherwise they are 
+%                   defined at the upper bound of target layer
 
 PhysicsConst;
 
