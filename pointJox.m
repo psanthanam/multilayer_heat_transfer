@@ -1,5 +1,6 @@
 function [ e,h ] = pointJox(omega,thickness_list, epsilon_list,kx,sourceLayer,d,isLossy)
-%This function calculates the flux when source jox is placed at a given point
+%This function calculates the flux when source jox is placed at a given
+%point d
 %   omega:          frequency
 %   thickness_list: thickness of every layer, should start and end with Inf
 %   epsilon_list:   epsilon for every layer, complex vector
@@ -17,7 +18,7 @@ function [ e,h ] = pointJox(omega,thickness_list, epsilon_list,kx,sourceLayer,d,
 %                   defined at the upper bound of target layer
 
 PhysicsConst;
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% initializing layers
 numOfLayer=size(thickness_list,1);
 if sourceLayer==1
@@ -43,8 +44,8 @@ e=zeros(numOfLayer-1,1);
 h=zeros(numOfLayer-1,1);
 
 %epsilon_list,thickness_list,sourceLayer,numOfLayer,isLossy
-
-    %% defining f_list
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% defining f_list, M matrix, I matrix, S matrix
     for i=1:numOfLayer
         kz(i)=sqrt(omega^2/c^2*epsilon_list(i)-kx^2);
         if imag(kz(i))>=0
@@ -61,7 +62,7 @@ h=zeros(numOfLayer-1,1);
     for i=1:numOfLayer-1
         I{i}=M{i}\M{i+1};
     end
-    %% updating S_Down
+    %% updating S from layer 2 to source layer
     if sourceLayer~=1
         for i=1:sourceLayer-1
             S{i+1}(1,1)=1/(I{i}(1,1)-f_list(i)*S{i}(1,2)*I{i}(2,1))*f_list(i)*S{i}(1,1);
@@ -71,7 +72,7 @@ h=zeros(numOfLayer-1,1);
             S{i+1}(2,2)=S{i}(2,2)*(I{i}(2,1)*S{i+1}(1,2)+I{i}(2,2)*f_list(i+1));
         end
     end
-    %% updating S_up
+    %% updating S from layer sourcelayer+1 to top layer
     if sourceLayer~=numOfLayer-1
         for i=sourceLayer+1:numOfLayer-1
             S{i+1}(1,1)=1/(I{i}(1,1)-f_list(i)*S{i}(1,2)*I{i}(2,1))*f_list(i)*S{i}(1,1);
@@ -93,7 +94,7 @@ h=zeros(numOfLayer-1,1);
     bSourceUp=S{numOfLayer}(2,1)*aSourceUp;
     b1=S{sourceLayer}(2,2)*bSource;
     a1=0;
-    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
     %% if the first layer is not lossy
     if isLossy(1)==0
         targetFields=M{1}*[a1;b1];
@@ -108,7 +109,7 @@ h=zeros(numOfLayer-1,1);
         h(sourceLayer)=targetFields(2);
     end
  
-        %% from layer 2 to sourcelayer, calculate the fields for the lossless layer
+    %% from layer 2 to sourcelayer, calculate the fields for the lossless layer
     for i=2:sourceLayer
         S_Target=S{i};
         if isLossy(i)==0
@@ -120,17 +121,17 @@ h=zeros(numOfLayer-1,1);
          end
     end
      
-        %% from sourcelayer+1 to the top layer, remember the index of e and h is i-1 because we artifically add a layer.
-     for i=sourceLayer+2:numOfLayer
-         S_Target=S{i};
-         if isLossy(i)==0
-             b_Target=(bSourceUp-S_Target(2,1)*aSourceUp)/S_Target(2,2);
-             a_Target=S_Target(1,1)*aSourceUp+S_Target(1,2)*b_Target;
-             targetFields=M{i}*[a_Target*f_list(i);b_Target];
-             e(i-1)=targetFields(1);
-             h(i-1)=targetFields(2);
-          end
-      end
+    %% from sourcelayer+1 to the top layer, remember the index of e and h is i-1 because we artifically add a layer.
+    for i=sourceLayer+2:numOfLayer
+        S_Target=S{i};
+        if isLossy(i)==0
+            b_Target=(bSourceUp-S_Target(2,1)*aSourceUp)/S_Target(2,2);
+            a_Target=S_Target(1,1)*aSourceUp+S_Target(1,2)*b_Target;
+            targetFields=M{i}*[a_Target*f_list(i);b_Target];
+            e(i-1)=targetFields(1);
+            h(i-1)=targetFields(2);
+        end
+    end
 
  %   e,h
 end
