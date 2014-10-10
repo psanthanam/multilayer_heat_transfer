@@ -36,11 +36,12 @@ end
 f_list=zeros(numOfLayer,1);
 I=cell(numOfLayer-1,1);
 M=cell(numOfLayer,1);
+kz=zeros(numOfLayer,1);
 S_Up=eye(2,2);
 S_Down=eye(2,2);
 S_Target=eye(2,2);
 
-epsilon_list,thickness_list,sourceLayer,targetLayer,numOfLayer
+% epsilon_list,thickness_list,sourceLayer,targetLayer,numOfLayer
 
     %% defining f_list
     for i=1:numOfLayer
@@ -91,9 +92,9 @@ epsilon_list,thickness_list,sourceLayer,targetLayer,numOfLayer
     b1=S_Down(2,2)*bSource;
     a1=0;
     if targetLayer==1
-        targetFields=M{1}\[a1;b1];
+        targetFields=M{1}*[a1;b1];
     elseif targetLayer == sourceLayer+1
-        targetFields=M{targetLayer}\[aSourceUp*f_list(targetLayer);bSourceUp];
+        targetFields=M{targetLayer}*[aSourceUp*f_list(targetLayer);bSourceUp];
     %% case when target layer is below sourcelayer, from layer 1
     elseif targetLayer<sourceLayer
         for i=1:targetLayer-1
@@ -106,7 +107,7 @@ epsilon_list,thickness_list,sourceLayer,targetLayer,numOfLayer
         b_Target=b1/S_Target(2,2);
         a_Target=S_Target(1,2)*b_Target;
         
-        targetFields=M{targetLayer}\[a_Target*f_list(targetLayer);b_Target];
+        targetFields=M{targetLayer}*[a_Target*f_list(targetLayer);b_Target];
    %% case when target layer is above sourcelayer, from source layer + 1
     else
         for i=sourceLayer+1:targetLayer-1
@@ -118,12 +119,9 @@ epsilon_list,thickness_list,sourceLayer,targetLayer,numOfLayer
         end
         b_Target=(bSourceUp-S_Target(2,1)*aSourceUp)/S_Target(2,2);
         a_Target=S_Target(1,1)*aSourceUp+S_Target(1,2)*b_Target;
-        targetFields=M{targetLayer}\[a_Target*f_list(targetLayer);b_Target];
-        
+        targetFields=M{targetLayer}*[a_Target*f_list(targetLayer);b_Target];
     end
     %% solving for the E and H fields.
     e=targetFields(1);  
     h=targetFields(2);
-
 end
-
