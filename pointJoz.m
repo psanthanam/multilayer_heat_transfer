@@ -1,5 +1,5 @@
 function [ e,h ] = pointJoz(omega,thickness_list, epsilon_list,kx,sourceLayer,d,isLossy)
-%This function calculates the flux when source joy is placed at a given point
+%This function calculates the flux when source joz is placed at a given point
 %   omega:          frequency
 %   thickness_list: thickness of every layer, should start and end with Inf
 %   epsilon_list:   epsilon for every layer, complex vector
