@@ -6,6 +6,9 @@ function [ e,h ] = pointJoy(omega,thickness_list, epsilon_list,kx,sourceLayer,d,
 %   kx:             the parellel wave vector
 %   sourceLayer:    where the source is. Origin point is put at the upper
 %                   surface of layer 1
+%   d:              if the source layer is layer 1, then this is the z
+%                   coordinate of the source, otherwise it is the relative 
+%                   position to the lower bound of source layer 
 %   targetLayer:    the layer where the probe is
 %   e,h:            calculated electric and magnetic fields at the target
 %                   layer, if the target layer has infinite thickness, the 
