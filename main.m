@@ -22,6 +22,8 @@ eyy=cell(size(omega_list,1),1);
 hxy=cell(size(omega_list,1),1);
 exz=cell(size(omega_list,1),1);
 hyz=cell(size(omega_list,1),1);
+fluxSpectrumTE=cell(size(omega_list,1),1);
+fluxSpectrumTM=cell(size(omega_list,1),1);
 fluxSpectrum=cell(size(omega_list,1),1);
 
 %% calculating the heat flux for all lossless layers
@@ -34,10 +36,10 @@ for i=1:10
     omega=omega_list(i);
     %% this function is aimed at calculating the flux spectrum at all lossless layers from source layer 
     %% This layer should be lossless
-%    fluxSpectrum{i}= quadgk(@(kx) (calJox(omega,thickness_list, epsilon_list,kx,1,isLossy)...
-%       + calJoy(omega,thickness_list, epsilon_list,kx,1,isLossy)...
+%    fluxSpectrumTE{i}= quadgk(@(kx) calJoy(omega,thickness_list,epsilon_list,kx,1,isLossy),0,Inf);
+%    fluxSpectrumTE{i}= quadgk(@(kx) (calJox(omega,thickness_list, epsilon_list,kx,1,isLossy)...
 %        + calJoz(omega,thickness_list, epsilon_list,kx,1,isLossy)),0,Inf);
-    
+%    fluxSpectrum{i}=fluxSpectrumTE{i}+fluxSpectrumTM{i};
     %% this function is aimed at calculating the fields if souce is at z=0. Source should be in lossy media
     [exx{i},hyx{i}] = pointJox(omega,thickness_list, epsilon_list,kx,sourceLayer,d,isLossy);
     [eyy{i},hxy{i}] = pointJoy(omega,thickness_list, epsilon_list,kx,sourceLayer,d,isLossy);
