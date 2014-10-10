@@ -2,39 +2,46 @@ clear;
 %% open matlabpool in Hera
 %% matlabpool open 4;
 
+%% initializing parameters
 materialNames={'InAs';'Air'};
 thickness_list=[Inf;Inf];   % thickness should start and end with Inf
+isLossy=[1;0];
 numOfLayer=size(thickness_list,1);
-
+sourceLayer=1;   % make sure the source layer is a lossy layer
+d=-1e-7;         % make sure the source is inside the layer
+kx=0;
 
 epsilon=cell(numOfLayer,1);
 for i=1:numOfLayer
-    [omega,epsilon{i}]=addMaterial(materialNames{i});
+    [omega_list,epsilon{i}]=addMaterial(materialNames{i});
 end
 
-exx=zeros(size(omega,1),1);
-hyx=zeros(size(omega,1),1);
-eyy=zeros(size(omega,1),1);
-hxy=zeros(size(omega,1),1);
-exz=zeros(size(omega,1),1);
-hyz=zeros(size(omega,1),1);
+exx=cell(size(omega_list,1),1);
+hyx=cell(size(omega_list,1),1);
+eyy=cell(size(omega_list,1),1);
+hxy=cell(size(omega_list,1),1);
+exz=cell(size(omega_list,1),1);
+hyz=cell(size(omega_list,1),1);
+fluxSpectrum=cell(size(omega_list,1),1);
 
-for i=1:size(omega,1)
+%% calculating the heat flux for all lossless layers
+for i=1:10
 %parfor i=1:size(omega,1)
     epsilon_list=size(numOfLayer,1);
     for j=1:numOfLayer
-       epsilon_list(j)=epsilon{j}(i); 
+       epsilon_list(j,1)=epsilon{j}(i); 
     end   
-    %% this function is aimed at calculating the flux spectrum at layer l=2 when source is at layer 1 
+    omega=omega_list(i);
+    %% this function is aimed at calculating the flux spectrum at all lossless layers from source layer 
     %% This layer should be lossless
 %    fluxSpectrum(i) = quadgk(@(kx) (calJox(omega(i),thickness_list, epsilon_list,kx,2,1)...
 %       + calJoy(omega(i),thickness_list, epsilon_list,kx,2,1)...
 %        + calJoz(omega(i),thickness_list, epsilon_list,kx,2,1)),0,Inf);
     
     %% this function is aimed at calculating the fields if souce is at z=0. Source should be in lossy media
-%    [exx(i),hyx(i)] = pointJox(omega(i),thickness_list, epsilon_list,kx,0);
-    [eyy(i),hxy(i)] = pointJoy(omega(i),thickness_list, epsilon_list,kx,0);
-%    [exz(i),hyz(i)] = quadgk(@(kx) pointJoz(omega(i),thickness_list, epsilon_list,kx,0),0,Inf);
+    [exx{i},hyx{i}] = pointJox(omega,thickness_list, epsilon_list,kx,sourceLayer,d,isLossy);
+    [eyy{i},hxy{i}] = pointJoy(omega,thickness_list, epsilon_list,kx,sourceLayer,d,isLossy);
+    [exz{i},hyz{i}] = pointJoz(omega,thickness_list, epsilon_list,kx,sourceLayer,d,isLossy);
 end
 
 %% saving data
