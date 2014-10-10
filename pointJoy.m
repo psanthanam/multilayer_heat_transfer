@@ -80,14 +80,14 @@ epsilon_list,thickness_list,sourceLayer,targetLayer,numOfLayer
     end
     %% solving for the a_l and b_l
     temp=zeros(2,2);
-    temp(1,1)=M{sourceLayer+1}(1,1)+M{sourceLayer+1}(1,2)*S_Up(1,2)*f_list(sourceLayer+1);
+    temp(1,1)=M{sourceLayer+1}(1,1)+M{sourceLayer+1}(1,2)*S_Up(2,1)*f_list(sourceLayer+1);
     temp(1,2)=-(M{sourceLayer}(1,1)*S_Down(1,2)*f_list(sourceLayer)+M{sourceLayer}(1,2));
-    temp(2,1)=M{sourceLayer+1}(2,1)+M{sourceLayer+1}(2,2)*S_Up(1,2)*f_list(sourceLayer+1);
+    temp(2,1)=M{sourceLayer+1}(2,1)+M{sourceLayer+1}(2,2)*S_Up(2,1)*f_list(sourceLayer+1);
     temp(2,2)=-(M{sourceLayer}(2,1)*S_Down(1,2)*f_list(sourceLayer)+M{sourceLayer}(2,2));
     sourceLayerFields=temp\[0;1];
     bSource=sourceLayerFields(2);
     aSourceUp=sourceLayerFields(1);
-    bSourceUp=S_Up(1,2)*aSourceUp;
+    bSourceUp=S_Up(2,1)*aSourceUp;
     b1=S_Down(2,2)*bSource;
     a1=0;
     if targetLayer==1
@@ -119,6 +119,7 @@ epsilon_list,thickness_list,sourceLayer,targetLayer,numOfLayer
         b_Target=(bSourceUp-S_Target(2,1)*aSourceUp)/S_Target(2,2);
         a_Target=S_Target(1,1)*aSourceUp+S_Target(1,2)*b_Target;
         targetFields=M{targetLayer}\[a_Target*f_list(targetLayer);b_Target];
+        
     end
     %% solving for the E and H fields.
     e=targetFields(1);  
