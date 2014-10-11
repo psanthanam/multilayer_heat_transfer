@@ -5,8 +5,10 @@ function Flux = calJox(omega,thickness_list, epsilon_list,kx_list,sourceLayer,ta
 %                   Inf, vector
 %   epsilon_list:   complex vector, containing epsilon for every layer
 %   sourceLayer:    at which layer source is placed, should be a lossy layer
-%   isLossy:        vector of 1 and 0, telling whether a layer is lossy
-
+%   targetLayer:    at which layer the flux is calculated, should be a
+%                   lossless layer
+%   isLossy:        a vector containing 1 and 0 indicate whether a layer is
+%                   lossy
 
 end
 
