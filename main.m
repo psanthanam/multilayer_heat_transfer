@@ -2,6 +2,8 @@ clear;
 %% open matlabpool in Hera
 %% matlabpool open 4;
 
+%% PARTHI HAS MODIFIED THIS FILE. (HE IS TRYING TO FIGURE OUT HOW GITHUB WORKS).
+
 %% initializing parameters
 materialNames={'InAs';'Air'};
 thickness_list=[Inf;Inf];   % thickness should start and end with Inf
