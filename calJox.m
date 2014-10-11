@@ -1,5 +1,5 @@
-function Flux = calJox(omega,thickness_list, epsilon_list,kx_list,sourceLayer,isLossy)
-%This function calculate the heat flux for souce jox
+function Flux = calJox(omega,thickness_list, epsilon_list,kx_list,sourceLayer,targetLayer,isLossy)
+%This function calculate the heat flux for source jox
 %   omega:          fequency, scalar 
 %   thickness_list: thickness from layer 1 to N, should start and end with
 %                   Inf, vector
